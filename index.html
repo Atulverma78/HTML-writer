@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>😜️</text></svg>">
+<title>HTML Writer By Atul 😜</title>
+<style>
+:root{--nav:#eceef2;--line:#d3d8e0;--ink:#1c2330;--accent:#2557d6;--accent-ink:#fff;--stage:#c9ced8;--hover:#dde1e8;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--nav:#1b2029;--line:#333b49;--ink:#e8ebf0;--accent:#7b9dff;--accent-ink:#0d1526;--stage:#12151b;--hover:#2a313d}}
+:root[data-theme="dark"]{--nav:#1b2029;--line:#333b49;--ink:#e8ebf0;--accent:#7b9dff;--accent-ink:#0d1526;--stage:#12151b;--hover:#2a313d}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%;margin:0}
+body{display:flex;flex-direction:column;overflow:hidden;background:var(--nav);color:var(--ink);font:15px/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+
+header{position:relative;z-index:5;flex:none;display:flex;align-items:center;gap:6px;height:52px;padding:0 10px;background:var(--nav);border-bottom:1px solid var(--line)}
+.btn{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 10px;border:0;border-radius:8px;background:transparent;color:var(--ink);font:inherit;font-weight:600;cursor:pointer}
+.btn:hover{background:var(--hover)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btn svg.solid{fill:currentColor}
+#title{flex:1;min-width:0;text-align:center;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#run{padding:0 14px;background:var(--accent);color:var(--accent-ink)}
+#run:hover{filter:brightness(1.08)}
+.btn:disabled{opacity:.35;cursor:default}
+.btn:disabled:hover{background:transparent}
+body.running #undo,body.running #redo{opacity:.35;pointer-events:none}
+
+.menu{display:none;position:absolute;top:calc(100% + 6px);right:10px;min-width:190px;padding:6px;background:var(--nav);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.menu.open{display:block}
+.menu button{display:flex;justify-content:space-between;gap:16px;width:100%;height:38px;align-items:center;padding:0 10px;border:0;border-radius:6px;background:transparent;color:var(--ink);font:inherit;cursor:pointer}
+.menu button:hover,.menu button[aria-pressed="true"]{background:var(--hover)}
+.menu button[aria-pressed="true"]{font-weight:700}
+.menu span+span{opacity:.65}
+
+main{flex:1;min-height:0;display:flex;flex-direction:column;gap:1px;background:var(--line)}
+#code{position:relative;flex:1;min-height:0;min-width:0;overflow:hidden;background:#fff;container-type:inline-size}
+#mark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;user-select:none;-webkit-user-select:none;opacity:.5}
+#mark span{font:800 clamp(32px,13cqw,130px)/1.1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:-.02em;white-space:nowrap;background:linear-gradient(90deg,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000,#ffffff,#000000);-webkit-background-clip:text;background-clip:text;color:transparent}
+#editor{position:absolute;inset:0;z-index:1;width:100%;height:100%;margin:0;padding:16px;border:0;outline:0;resize:none;background:transparent;color:#1a1a1a;caret-color:#1a1a1a;font:16px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;tab-size:2}
+#editor::placeholder{color:#9aa1ac;opacity:1}
+#stage{display:none;flex:1;min-height:0;min-width:0;overflow:hidden;background:var(--stage)}
+#wrap{position:relative;margin:0 auto;overflow:hidden;background:#fff;box-shadow:0 0 0 1px var(--line)}
+#frame{display:block;border:0;background:#fff;transform-origin:top left}
+body.split #stage,body.running #stage{display:block}
+body.running #code{display:none}
+@media (min-aspect-ratio:1/1){body.split:not(.running) main{flex-direction:row}}
+#split[aria-pressed="true"]{background:var(--hover);box-shadow:inset 0 0 0 1.5px var(--accent)}
+@media (max-width:480px){.btn{padding:0 8px;gap:4px}#run{padding:0 12px}#title{font-size:14px}}
+@media (max-width:360px){#dimLabel{display:none}}
+
+/* title hugs its text; the action buttons follow redo directly */
+#title{flex:none;overflow:visible;text-overflow:clip;padding:0 2px}
+@media (max-width:360px){#dimLabel{display:inline}}
+
+/* Full, Split, Maximize, Save and Run share one size (Run keeps its accent colour) and split the rest of the row evenly, so no space is left over. */
+#run{padding:0 10px}
+#dim,#split,#maxi,#save,#run{flex:1 1 auto;justify-content:center;max-width:180px}
+
+/* phones and small tablets: every button and the title are sized in em from one --f value on the header.
+   The script below picks the biggest --f at which every icon and name still fits, so everything shrinks together. */
+@media (max-width:720px){
+  header{--f:15px;font-size:var(--f);gap:1px;padding:0 2px}
+  header .menu{font-size:15px}
+  header .btn{height:min(36px,2.9em);padding:0 .3em;gap:.2em;border-radius:.5em}
+  header .btn svg{width:1.2em;height:1.2em}
+  #home,#undo,#redo{padding:0 .45em}
+  #dim,#split,#maxi,#save,#run{padding:0 .3em}
+  #title{font-size:1.05em;padding:0}
+}
+
+/* last resort, only if even the smallest --f cannot fit everything: the script adds these to the header one step at a time */
+header.txt :is(#dim,#split,#maxi,#save,#run) svg{display:none}
+header.dimi #dim svg,header.maxii #maxi svg{display:block}
+header.dimi #dim span,header.maxii #maxi span{display:none}
+header.ico :is(#dim,#split,#maxi,#save) span{display:none}
+
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:30;max-width:calc(100% - 32px);padding:10px 14px;border-radius:10px;background:var(--ink);color:var(--nav);font-size:14px;font-weight:600;opacity:0;transform:translate(-50%,8px);pointer-events:none;transition:opacity .2s,transform .2s}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* save dialog */
+#saveModal{display:none;position:fixed;inset:0;z-index:20;align-items:center;justify-content:center;padding:16px;background:rgba(8,10,16,.55)}
+#saveModal.open{display:flex}
+.dialog{position:relative;display:flex;flex-direction:column;gap:14px;width:100%;max-width:380px;padding:18px 18px 22px;background:var(--nav);color:var(--ink);border:1px solid var(--line);border-radius:14px;box-shadow:0 16px 48px rgba(0,0,0,.35);animation:pop .16s ease-out}
+@keyframes pop{from{opacity:0;transform:translateY(6px) scale(.98)}}
+.dialog h2{margin:0;padding-right:40px;font-size:16px;font-weight:700}
+#closeSave{position:absolute;top:8px;right:8px;width:36px;padding:0;justify-content:center}
+.namebox{display:flex;align-items:stretch;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.namebox:focus-within{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+#fileName{flex:1;min-width:0;height:44px;padding:0 10px;border:0;outline:0;background:transparent;color:var(--ink);font:inherit;font-size:16px}
+#fileName::placeholder{color:var(--ink);opacity:.5}
+#fileSuffix{display:flex;align-items:center;flex:none;padding:0 10px;border-left:1px solid var(--line);background:var(--hover);font-weight:600;white-space:nowrap;cursor:default;user-select:none;-webkit-user-select:none}
+#doSave{width:100%;height:44px;justify-content:center;padding:0 14px;background:var(--accent);color:var(--accent-ink)}
+#doSave:hover{filter:brightness(1.08)}
+#thanks{letter-spacing:.04em;color:#e0207f;text-shadow:0 0 6px currentColor,0 0 16px currentColor;}
+.hehe {color: #fff;font-family: cursive;margin:2px 0 -2px;font-weight:700;width: 100%;text-align:center;font-size:22px;background: rgba(255,255,255,0);z-index: 10;animation:glow 2.2s ease-in-out infinite alternate;}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #thanks{color:#ff6fb1}}
+:root[data-theme="dark"] #thanks{color:#ff6fb1}
+@keyframes glow{from{text-shadow:0 0 3px currentColor,0 0 9px currentColor}to{text-shadow:0 0 8px currentColor,0 0 22px currentColor,0 0 36px currentColor}}
+@media (prefers-reduced-motion:reduce){#thanks,.dialog{animation:none}}
+</style>
+</head>
+<body>
+<header>
+  <button class="btn" id="home" aria-label="Home"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></button>
+  <button class="btn" id="undo" aria-label="Undo" disabled><svg viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></button>
+  <div id="title">ﾑｲひﾚ 💕</div>
+  <button class="btn" id="redo" aria-label="Redo" disabled><svg viewBox="0 0 24 24"><path d="M15 14l5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/></svg></button>
+  <button class="btn" id="dim" aria-label="Screen size" aria-haspopup="true" aria-expanded="false"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span id="dimLabel">Full</span></button>
+  <button class="btn" id="split" aria-label="Split view" aria-pressed="false"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 4v16"/></svg><span>Split</span></button>
+  <button class="btn" id="maxi" aria-label="Maximize"><svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg><span class="lbl">Maximize</span></button>
+  <button class="btn" id="save" aria-label="Save file" aria-haspopup="dialog"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8"/><path d="M7 3v5h8"/></svg><span class="lbl">Save</span></button>
+  <button class="btn" id="run" aria-label="Run code"></button>
+  <div class="menu" id="menu"></div>
+</header>
+
+<main>
+<div id="code">
+  <div id="mark" aria-hidden="true"><span>ﾑｲひﾚ 💕</span></div>
+  <textarea id="editor" autofocus placeholder="Write your HTML Code here..." spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Code editor"></textarea>
+</div>
+
+<div id="stage"><div id="wrap"><iframe id="frame" title="Preview" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe></div></div>
+</main>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<div id="saveModal">
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="saveTitle">
+    <h2 id="saveTitle">Save file</h2>
+    <button class="btn" id="closeSave" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <div class="namebox">
+      <input id="fileName" type="text" placeholder="File name" maxlength="100" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="File name" aria-describedby="fileSuffix">
+      <span id="fileSuffix">_ﾑｲひﾚ 💕.html</span>
+    </div>
+    <button class="btn" id="doSave"><svg viewBox="0 0 24 24"><path d="M12 4v11"/><path d="M7 11l5 5 5-5"/><path d="M5 20h14"/></svg><span>Save</span></button>
+    <div class="hehe"><p id="thanks">
+    <a href="https://www.instagram.com/atul_verma_78/" style="color:#ffffff;text-decoration:none;">
+    <p>This code is written by <span style="font-size:20px;">ﾑｲひﾚ 💕</span> </p>
+  </a></p></div>
+    
+  </div>
+</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var editor=$('editor'),frame=$('frame'),wrap=$('wrap'),stage=$('stage'),run=$('run'),title=$('title'),dim=$('dim'),menu=$('menu'),dimLabel=$('dimLabel'),split=$('split');
+  var SIZES=[['full','Full',0],['desktop','Desktop',1280],['tablet','Tablet',768],['mobile','Mobile',375]];
+  var size='full',running=false,splitOn=false,liveTimer;
+  var PLAY='<svg class="solid" viewBox="0 0 24 24"><path d="M7 4.5l12 7.5-12 7.5z"/></svg><span>Run</span>';
+  var BACK='<svg viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/></svg><span>Back</span>';
+
+  try{editor.value=localStorage.getItem('htmlwriter:code')||''}catch(e){}
+  editor.addEventListener('input',function(){
+    try{localStorage.setItem('htmlwriter:code',editor.value)}catch(e){}
+    if(splitOn&&!running){clearTimeout(liveTimer);liveTimer=setTimeout(function(){frame.srcdoc=editor.value},250)}
+  });
+  editor.addEventListener('keydown',function(e){
+    if(e.key==='Tab'){e.preventDefault();editor.setRangeText('  ',editor.selectionStart,editor.selectionEnd,'end');editor.dispatchEvent(new Event('input'))}
+  });
+
+  function fit(){
+    var item=SIZES.filter(function(s){return s[0]===size})[0];
+    var sw=stage.clientWidth,sh=stage.clientHeight;
+    var w=item[2]||sw,s=Math.min(1,sw/w);
+    frame.style.width=w+'px';
+    frame.style.height=(sh/s)+'px';
+    frame.style.transform='scale('+s+')';
+    wrap.style.width=(w*s)+'px';
+    wrap.style.height=sh+'px';
+  }
+
+  function setRunning(on){
+    running=on;
+    document.body.classList.toggle('running',on);
+    run.innerHTML=on?BACK:PLAY;
+    run.setAttribute('aria-label',on?'Back to editor':'Run code');
+    title.textContent=on?'Preview':'ﾑｲひﾚ 💕';
+    closeMenu();
+    if(on){frame.srcdoc=editor.value;fit()}
+    else{editor.focus();if(splitOn){frame.srcdoc=editor.value;fit()}else{frame.srcdoc=''}}
+  }
+
+  function setSplit(on){
+    splitOn=on;
+    document.body.classList.toggle('split',on);
+    split.setAttribute('aria-pressed',on);
+    if(running){setRunning(false);return}
+    if(on){frame.srcdoc=editor.value;fit()}else{frame.srcdoc=''}
+    editor.focus();
+    closeMenu();
+  }
+
+  function closeMenu(){menu.classList.remove('open');dim.setAttribute('aria-expanded','false')}
+  function setSize(key){
+    size=key;
+    SIZES.forEach(function(s){if(s[0]===key)dimLabel.textContent=s[1]});
+    Array.prototype.forEach.call(menu.children,function(b){b.setAttribute('aria-pressed',b.dataset.k===key)});
+    if(running||splitOn)fit();
+    closeMenu();
+  }
+
+  SIZES.forEach(function(s){
+    var b=document.createElement('button');
+    b.dataset.k=s[0];
+    b.innerHTML='<span>'+s[1]+'</span><span>'+(s[2]?s[2]+' px':'Fit')+'</span>';
+    b.addEventListener('click',function(){setSize(s[0])});
+    menu.appendChild(b);
+  });
+
+  dim.addEventListener('click',function(e){
+    e.stopPropagation();
+    var open=!menu.classList.contains('open');
+    menu.classList.toggle('open',open);
+    dim.setAttribute('aria-expanded',open);
+  });
+  document.addEventListener('click',closeMenu);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeMenu()});
+  run.addEventListener('click',function(){setRunning(!running)});
+  split.addEventListener('click',function(){setSplit(running?true:!splitOn)});
+  $('home').addEventListener('click',function(){
+    editor.value='';
+    try{localStorage.removeItem('htmlwriter:code')}catch(e){}
+    setRunning(false);
+    editor.focus();
+  });
+  window.addEventListener('resize',function(){if(running||splitOn)fit()});
+
+  run.innerHTML=PLAY;
+  setSize('full');
+  editor.focus();
+})();
+</script>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var editor=$('editor'),undoBtn=$('undo'),redoBtn=$('redo'),title=$('title'),home=$('home');
+  var LIMIT=200,hist=[editor.value],pos=0,timer;
+
+  function state(){
+    var dirty=editor.value!==hist[pos];
+    undoBtn.disabled=!(pos>0||dirty);
+    redoBtn.disabled=dirty||pos>=hist.length-1;
+  }
+  function snap(){
+    clearTimeout(timer);
+    if(editor.value===hist[pos])return state();
+    hist.length=pos+1;
+    hist.push(editor.value);
+    if(hist.length>LIMIT)hist.shift();
+    pos=hist.length-1;
+    state();
+  }
+  function caretAt(a,b){
+    var p=0,m=Math.min(a.length,b.length),s=0;
+    while(p<m&&a.charCodeAt(p)===b.charCodeAt(p))p++;
+    while(s<m-p&&a.charCodeAt(a.length-1-s)===b.charCodeAt(b.length-1-s))s++;
+    return b.length-s;
+  }
+  function go(step){
+    if(document.body.classList.contains('running'))return;
+    snap();
+    var next=pos+step;
+    if(next<0||next>=hist.length)return;
+    var prev=editor.value;
+    pos=next;
+    editor.value=hist[pos];
+    var c=caretAt(prev,editor.value);
+    editor.focus();
+    editor.setSelectionRange(c,c);
+    editor.dispatchEvent(new Event('input'));
+    state();
+  }
+
+  editor.addEventListener('input',function(){
+    clearTimeout(timer);
+    timer=setTimeout(snap,500);
+    state();
+  });
+  editor.addEventListener('keydown',function(e){
+    if(!(e.ctrlKey||e.metaKey)||e.altKey)return;
+    var k=e.key.toLowerCase();
+    if(k==='z'){e.preventDefault();go(e.shiftKey?1:-1)}
+    else if(k==='y'){e.preventDefault();go(1)}
+  });
+  home.addEventListener('click',snap);
+
+  [undoBtn,redoBtn].forEach(function(b){
+    b.addEventListener('mousedown',function(e){e.preventDefault()});
+  });
+  undoBtn.addEventListener('click',function(){go(-1)});
+  redoBtn.addEventListener('click',function(){go(1)});
+
+  function onText(e){
+    if(document.body.classList.contains('running'))return false;
+    var r=document.createRange();
+    r.selectNodeContents(title);
+    var b=r.getBoundingClientRect();
+    return e.clientX>=b.left&&e.clientX<=b.right&&e.clientY>=b.top&&e.clientY<=b.bottom;
+  }
+  title.addEventListener('mousemove',function(e){title.style.cursor=onText(e)?'pointer':''});
+  title.addEventListener('click',function(e){
+    if(onText(e))window.open('https://www.instagram.com/atul_verma_78/','_blank','noopener');
+  });
+
+  state();
+})();
+</script>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var editor=$('editor'),modal=$('saveModal'),input=$('fileName'),suffix=$('fileSuffix').textContent;
+
+  function open(){modal.classList.add('open');input.focus()}
+  function close(){modal.classList.remove('open');editor.focus()}
+  function fileName(){
+    var base=input.value.replace(/[\\\/:*?"<>|\u0000-\u001f]/g,'').replace(/^[\s.]+/,'');
+    return base+suffix;
+  }
+  function save(){
+    var blob=new Blob([editor.value],{type:'text/html;charset=utf-8'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url;
+    a.download=fileName();
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function(){URL.revokeObjectURL(url)},1000);
+  }
+
+  $('save').addEventListener('click',open);
+  $('closeSave').addEventListener('click',close);
+  $('doSave').addEventListener('click',save);
+  modal.addEventListener('click',function(e){if(e.target===modal)close()});
+  input.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();save()}});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modal.classList.contains('open'))close()});
+})();
+</script>
+<script>
+(function(){
+  var header=document.querySelector('header');
+  /* biggest size at which every icon and name fits; only if the smallest size still overflows are icons/names dropped */
+  var MAXF=15,MINF=9,small=window.matchMedia('(max-width:720px)');
+  var STEPS=[[],['txt'],['txt','dimi'],['txt','dimi','maxii'],['ico']];
+  function over(){return header.scrollWidth>header.clientWidth}
+  function setF(f){header.style.setProperty('--f',f+'px')}
+  function fit(){
+    header.classList.remove('txt','dimi','maxii','ico');
+    if(small.matches){
+      var f=MAXF;
+      setF(f);
+      while(over()&&f>MINF){f-=.25;setF(f)}
+    }
+    for(var i=1;i<STEPS.length&&over();i++){
+      header.classList.remove('txt','dimi','maxii','ico');
+      STEPS[i].forEach(function(c){header.classList.add(c)});
+    }
+  }
+  new MutationObserver(fit).observe(header,{childList:true,characterData:true,subtree:true});
+  new MutationObserver(fit).observe(document.body,{attributes:true,attributeFilter:['class']});
+  window.addEventListener('resize',fit);
+  window.addEventListener('load',fit);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
+  fit();
+})();
+</script>
+<script>
+(function(){
+  var btn=document.getElementById('maxi'),icon=btn.querySelector('svg'),label=btn.querySelector('.lbl'),
+      toastEl=document.getElementById('toast'),root=document.documentElement,timer;
+  var MAX='<path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/>';
+  var MIN='<path d="M8 3v3a2 2 0 0 1-2 2H3"/><path d="M21 8h-3a2 2 0 0 1-2-2V3"/><path d="M3 16h3a2 2 0 0 1 2 2v3"/><path d="M16 21v-3a2 2 0 0 1 2-2h3"/>';
+  function isFull(){return !!(document.fullscreenElement||document.webkitFullscreenElement)}
+  function toast(msg){
+    toastEl.textContent=msg;
+    toastEl.classList.add('show');
+    clearTimeout(timer);
+    timer=setTimeout(function(){toastEl.classList.remove('show')},2400);
+  }
+  function sync(){
+    var on=isFull();
+    icon.innerHTML=on?MIN:MAX;
+    label.textContent=on?'Minimize':'Maximize';
+    btn.setAttribute('aria-label',on?'Minimize':'Maximize');
+  }
+  btn.addEventListener('click',function(){
+    var p;
+    if(isFull()){
+      var exit=document.exitFullscreen||document.webkitExitFullscreen;
+      if(exit){p=exit.call(document);if(p&&p.catch)p.catch(function(){})}
+      return;
+    }
+    var req=root.requestFullscreen||root.webkitRequestFullscreen;
+    if(!req){toast('Full screen isn\u2019t available in this browser.');return}
+    try{p=req.call(root)}catch(e){toast('Full screen isn\u2019t available here.');return}
+    if(p&&p.catch)p.catch(function(){toast('Full screen isn\u2019t available here.')});
+  });
+  document.addEventListener('fullscreenchange',sync);
+  document.addEventListener('webkitfullscreenchange',sync);
+})();
+</script>
+</body>
+</html>
